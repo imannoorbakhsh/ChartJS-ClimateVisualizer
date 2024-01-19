@@ -4,17 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Climate Data Visualization</title>
-    <!-- Add your CSS file link here if you have one -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div>
-        <canvas id="myChart"></canvas>
+
+    <div class="charts-wrapper">
+        <div class="chart-container">
+            <canvas id="chart1"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="chart2"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="chart3"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="chart4"></canvas>
+        </div>
     </div>
 
     <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <!-- JavaScript File -->
     <script src="script.js"></script>
+
 </body>
 </html>
