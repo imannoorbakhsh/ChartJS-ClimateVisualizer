@@ -1,4 +1,12 @@
-//for this project, I want to use National Weather Service's (NWS) Web API. the API is not called properly or the data is not parsed correctly is going to be fixed
+
+//The original implementation with the National Weather Service's (NWS) Web API has been replaced due to issues with API calls and data parsing.
+
+/*This project has transitioned to using the Open-Meteo API for weather data retrieval. 
+The initial approach using the National Weather Service's (NWS) Web API was revised due to complications in API calls and data handling. 
+The current implementation fetches hourly temperature data using the Open-Meteo API. 
+This data is then used to populate a line chart, showcasing the temperature trends at different times. 
+The chart is dynamically updated with real-time weather data. Additionally, a secondary chart is included in the implementation, displaying random data for comparison and layout purposes.
+*/
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -36,28 +44,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to update the first chart with new data from API
     function updateChart1(data) {
-        chart1.data.labels = data.map(item => item.date);
-        chart1.data.datasets[0].data = data.map(item => item.value);
+        chart1.data.labels = data.map(item => item.time);
+        chart1.data.datasets[0].data = data.map(item => item.temperature);
         chart1.update();
     }
 
     // Function to fetch real-time data for the first chart
     function fetchWeatherData() {
-        const url = `https://api.weather.gov/points/39.7456,-97.0892/forecast`;
+        const url = 'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&timezone=GMT';
 
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'User-Agent': 'my-weather-app/1.0 (myemail@example.com)'
-            }
-        })
+        fetch(url)
         .then(response => response.json())
         .then(data => {
-            const periods = data.properties.periods;
-            const chartData = periods.map(period => {
+            const hourlyTemperatures = data.hourly;
+            const chartData = hourlyTemperatures.time.map((time, index) => {
                 return {
-                    date: period.startTime,
-                    value: period.temperature
+                    time: time,
+                    temperature: hourlyTemperatures.temperature_2m[index]
                 };
             });
 
