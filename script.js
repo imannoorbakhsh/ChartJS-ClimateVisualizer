@@ -1,16 +1,6 @@
+document.addEventListener('DOMContentLoaded', function () {
 
-//The original implementation with the National Weather Service's (NWS) Web API has been replaced due to issues with API calls and data parsing.
-
-/*This project has transitioned to using the Open-Meteo API for weather data retrieval. 
-The initial approach using the National Weather Service's (NWS) Web API was revised due to complications in API calls and data handling. 
-The current implementation fetches hourly temperature data using the Open-Meteo API. 
-This data is then used to populate a line chart, showcasing the temperature trends at different times. 
-The chart is dynamically updated with real-time weather data. Additionally, a secondary chart is included in the implementation, displaying random data for comparison and layout purposes.
-*/
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    // First chart (API data)
+    // First chart (line chart with real time API data)
     var ctx1 = document.getElementById('chart1').getContext('2d');
     var chart1 = new Chart(ctx1, {
         type: 'line',
@@ -26,10 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
         options: {}
     });
 
-    // Second chart (random data)
+    // Second chart (polarArea with random data)
     var ctx2 = document.getElementById('chart2').getContext('2d');
     var chart2 = new Chart(ctx2, {
-        type: 'line',
+        type: 'polarArea',
         data: {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
             datasets: [{
@@ -41,6 +31,47 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         options: {}
     });
+
+    // Third chart (Bar Chart with random data)
+    var ctx3 = document.getElementById('chart3').getContext('2d');
+    var chart3 = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            datasets: [{
+                label: 'Average Daily Temperature',
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                data: [12, 15, 14, 18, 20, 22, 19]
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    // Fourth chart (Doughnut Chart for temperature distribution)
+    var ctx4 = document.getElementById('chart4').getContext('2d');
+    var chart4 = new Chart(ctx4, {
+        type: 'doughnut',
+        data: {
+            labels: ['Cold', 'Mild', 'Warm'],
+            datasets: [{
+                label: 'Temperature Distribution',
+                backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(255, 205, 86, 0.6)', 'rgba(75, 192, 192, 0.6)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(255, 205, 86, 1)', 'rgba(75, 192, 192, 1)'],
+                data: [25, 50, 25]
+            }]
+        }
+    });
+
+
+
 
     // Function to update the first chart with new data from API
     function updateChart1(data) {
@@ -54,19 +85,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const url = 'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&timezone=GMT';
 
         fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const hourlyTemperatures = data.hourly;
-            const chartData = hourlyTemperatures.time.map((time, index) => {
-                return {
-                    time: time,
-                    temperature: hourlyTemperatures.temperature_2m[index]
-                };
-            });
+            .then(response => response.json())
+            .then(data => {
+                const hourlyTemperatures = data.hourly;
+                const chartData = hourlyTemperatures.time.map((time, index) => {
+                    return {
+                        time: time,
+                        temperature: hourlyTemperatures.temperature_2m[index]
+                    };
+                });
 
-            updateChart1(chartData);
-        })
-        .catch(error => console.error('Error fetching data:', error));
+                updateChart1(chartData);
+            })
+            .catch(error => console.error('Error fetching data:', error));
     }
 
     fetchWeatherData();
